@@ -66,6 +66,7 @@ SUPPORTED_HVAC_MODES = [
     HVACMode.HEAT,
     HVACMode.FAN_ONLY,
     HVACMode.DRY,
+    HVACMode.OFF,
 ]
 
 ATTR_OPTIONS_NAME: Final = "attr_options_name"
@@ -210,9 +211,17 @@ class Climate(ControllableSync):
                     {ATTR_HVAC_MODE: SUPPORTED_HVAC_MODES[msg[1] - 1]},
                 )
                 if len(msg) > 1 and msg[1] >= 1 and msg[1] <= 5
-                else (DOMAIN, SERVICE_TURN_ON, {})
+                else (
+                    DOMAIN,
+                    SERVICE_SET_HVAC_MODE,
+                    {ATTR_HVAC_MODE: SUPPORTED_HVAC_MODES[0]},
+                )
                 if msg[0] == MSG_ON and len(msg) == 1
-                else (DOMAIN, SERVICE_TURN_OFF, {}),
+                else (
+                    DOMAIN,
+                    SERVICE_SET_HVAC_MODE,
+                    {ATTR_HVAC_MODE: SUPPORTED_HVAC_MODES[5]},
+                ),
             ),
             (
                 2,
